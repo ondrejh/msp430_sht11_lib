@@ -1,0 +1,6 @@
+*.d
+*.o
+*.elf
+*.map
+*.layout
+msp430sht.txt

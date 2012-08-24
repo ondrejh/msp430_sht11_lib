@@ -24,6 +24,7 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="Makefile" />
+		<Unit filename="README.md" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
