@@ -10,6 +10,23 @@
 //   MSP430G2xx3 Demo - Timer_A, Toggle P1.0, CCR0 Cont. Mode ISR, DCO SMCLK
 //   ...
 //
+// hardware: MSP430G2553 (launchpad)
+//
+//                MSP4302553
+//             -----------------
+//         /|\|              XIN|-
+//          | |                 |
+//          --|RST          XOUT|-
+//            |                 |
+//            |           P1.1,2|--> UART (debug output 9.6kBaud)
+//            |                 |
+//            |             P1.0|--> RED LED (active high)
+//            |             P1.6|--> GREEN LED (active high)
+//            |                 |                                     -------
+//            |             P2.0|<-> SHT DATA <-----------pullup---->| SHT11 |
+//            |             P2.1|--> SHT SCK -------------pullup---->|       |
+//            |                 |                                     -------
+
 //******************************************************************************
 
 #define DEBUG
