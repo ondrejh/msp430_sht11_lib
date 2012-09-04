@@ -15,21 +15,6 @@
 
 #include "sht11con.h" // self
 
-/** conversion constants (see sht11 datasheet) */
-
-/// RH 12bit
-#define C1 -2.0468
-#define C2 0.0367
-#define C3 -1.5955e-6
-
-/// T 14bit 3.5V
-#define D1 -39.7
-#define D2 0.01
-
-/// RH temp. compensation (RH 12bit)
-#define T1 0.01
-#define T2 0.00008
-
 /** interface section */
 
 /// sht registers to int conversion
