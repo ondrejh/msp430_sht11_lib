@@ -35,6 +35,7 @@
 #include <msp430g2553.h>
 #include "timer.h"
 #include "sht11.h"
+#include "sht11con.h"
 
 #ifdef DEBUG
 #include "uart.h"
@@ -76,18 +77,15 @@ int main(void)
 
 	while(1)
 	{
-		unsigned int val;
+		unsigned int Tval,Hval;
+		int TvalC,HvalC;
 		LED_GREEN_ON();
-		if (sht_measure_check(&val,TEMP)==0)
+		if ((sht_measure_check(&Tval,TEMP)==0) && (sht_measure_check(&Hval,HUMI)==0))
 		{
+			sht2int(Tval,Hval,&TvalC,&HvalC);
 			#ifdef DEBUG
-			set_debug_value(val,0);
-			#endif
-		}
-		if (sht_measure_check(&val,HUMI)==0)
-		{
-			#ifdef DEBUG
-			set_debug_value(val,1);
+			set_debug_value(int2bcd(TvalC),0);
+			set_debug_value(int2bcd(HvalC),1);
 			#endif
 		}
 	    LED_GREEN_OFF();

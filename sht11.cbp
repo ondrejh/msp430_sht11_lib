@@ -32,6 +32,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="sht11.h" />
+		<Unit filename="sht11con.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sht11con.h" />
 		<Unit filename="timer.c">
 			<Option compilerVar="CC" />
 		</Unit>
