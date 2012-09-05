@@ -32,11 +32,11 @@
 // hardware dependent defines
 // delay
 #define delay_us(x) __delay_cycles(x)
-// port (DATA P2.0, SCK P2.1)
-#define SHT_PORT_INIT() {P2DIR|=0x03;P2OUT&=~0x03;}
-#define SHT_DATA_OUT(x) {if (x!=0) P2DIR|=0x01; else P2DIR&=~0x01;}
-#define SHT_DATA_IN (((P2IN&0x01)!=0)?1:0)
-#define SHT_SCK(x) {if (x!=0) P2OUT|=0x02; else P2OUT&=~0x02;}
+// port (DATA P2.3, SCK P2.4)
+#define SHT_PORT_INIT() {P2DIR|=0x18;P2OUT&=~0x18;}
+#define SHT_DATA_OUT(x) {if (x!=0) P2DIR|=0x08; else P2DIR&=~0x08;}
+#define SHT_DATA_IN (((P2IN&0x08)!=0)?1:0)
+#define SHT_SCK(x) {if (x!=0) P2OUT|=0x10; else P2OUT&=~0x10;}
 
 // communication
 #define		noACK	0
