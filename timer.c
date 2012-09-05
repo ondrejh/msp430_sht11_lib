@@ -37,14 +37,7 @@ void timer_init(void)
 #pragma vector=TIMER0_A0_VECTOR
 __interrupt void Timer_A (void)
 {
-	static unsigned int cnt = 0;
-	CCR0 += TIMER_INTERVAL;				// Add Offset to CCR0
-	cnt++;
-	if (cnt>=TIMER_MULTIPLIER)
-	{
-		cnt=0;
-		__bic_SR_register_on_exit(CPUOFF);        // Clear CPUOFF bit from 0(SR)
-	}
+	__bic_SR_register_on_exit(CPUOFF); // Clear CPUOFF bit from 0(SR)
 }
 
 // init pwm timer (timer 1A)

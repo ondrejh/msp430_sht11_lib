@@ -25,17 +25,10 @@
 		</Compiler>
 		<Unit filename="Makefile" />
 		<Unit filename="README.md" />
+		<Unit filename="board.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="sht11.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="sht11.h" />
-		<Unit filename="sht11con.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="sht11con.h" />
 		<Unit filename="timer.c">
 			<Option compilerVar="CC" />
 		</Unit>

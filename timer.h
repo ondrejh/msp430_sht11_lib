@@ -25,11 +25,8 @@
 
 #include <inttypes.h>
 
-// timer counter multiplier (10 * 0.5s = 5s)
-#define TIMER_MULTIPLIER 10
-
-// timer interval (0.5s / 1MHz osc / fosc/8)
-#define TIMER_INTERVAL 62500
+// timer interval (10ms / 1MHz osc / fosc/8)
+#define TIMER_INTERVAL 1250
 
 void timer_init(void);
 
