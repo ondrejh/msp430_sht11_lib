@@ -4,7 +4,12 @@ PortName = 'COM11'
 PortSpeed = 9600
 PortTimeout = 0.5
 
-StrQuestion = '?'
+#StrQuestion = '?'
+StrQuestion = 'd'
+#StrQuestion = 's0\n'
+#StrQuestion = 's20\n'
+#StrQuestion = 's3F\n'
+#StrQuestion = 's64\n'
 
 with Serial(PortName,PortSpeed,timeout=PortTimeout) as port:
 

@@ -15,6 +15,8 @@
 #include <msp430g2553.h>
 #include <stdbool.h>
 
+#include "timer.h"
+
 #include "uart.h"
 
 // uart TX led
@@ -45,16 +47,30 @@ unsigned int uart_tx_inptr=0, uart_tx_outptr=0;
 // uart transmit flag (0 not transmitting, 1 transmitting)
 bool uart_tx_transmitt = false;
 
+bool get_val = false;
+uint16_t val = 0;
+
 // local function definition
 int uart_start_tx(void);
 
 // implementation section
 
+// hex int (0..F) to char ('0' .. 'F') conversion
 char h2c(unsigned int h)
 {
 	unsigned int hx = h&0xF;
 	if (hx<0xA) return ('0'+hx);
 	return ('A'+hx-10);
+}
+
+// char ('0'..'9','a'..'f','A'..'F') to hex int (0..F) conversion
+// if not hex char return -1
+int8_t c2h(char c)
+{
+    if ((c>='0')&&(c<='9')) return (c-'0');
+    if ((c>='a')&&(c<='f')) return (c-('a'-10));
+    if ((c>='A')&&(c<='F')) return (c-('A'-10));
+    return -1;
 }
 
 void set_debug_value(unsigned int value, unsigned int channel)
@@ -137,10 +153,32 @@ int uart_puts(char *s)
 #pragma vector=USCIAB0RX_VECTOR
 __interrupt void USCI0RX_ISR(void)
 {
-	UART_TX_LED_ON();
 	char c = UCA0RXBUF;		// read char
-	if (c=='?')
+	if (get_val)
 	{
+	    if (c=='\n')
+	    {
+	        pwm_set(val);
+	        get_val = false;
+	        return;
+	    }
+	    int8_t h = c2h(c);
+	    if (h>=0)
+	    {
+	        val<<=4;
+	        val|=h;
+	        return;
+	    }
+	    else get_val = false; // error while getting value
+	}
+	if (c=='?') // say hello
+	{
+        UART_TX_LED_ON();
+        uart_puts("Hello World!\n");
+	}
+	else if (c=='d') // d for debug get
+	{
+        UART_TX_LED_ON();
 		int i;
 		for (i=0;i<CHANNELS;i++)
 		{
@@ -152,6 +190,11 @@ __interrupt void USCI0RX_ISR(void)
 		}
 		uart_putc('\n');
 		//uart_puts("Hello World!\n");
+	}
+	else if (c=='s') // s for set pwm
+	{
+	    get_val = true;
+	    val = 0;
 	}
 }
 

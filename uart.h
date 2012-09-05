@@ -14,6 +14,8 @@
 #ifndef UART_H_
 #define UART_H_
 
+#include <inttypes.h>
+
 void set_debug_value(unsigned int value, unsigned int channel);
 unsigned int get_debug_value(unsigned int channel);
 
