@@ -26,6 +26,8 @@
 //            |             P2.3|<-> SHT DATA <-----------pullup---->| SHT11 |
 //            |             P2.4|--> SHT SCK -------------pullup---->|       |
 //            |                 |                                     -------
+//            |             P2.2|--> PWM OUT
+//            |                 |
 
 //******************************************************************************
 
@@ -60,6 +62,8 @@ void board_init(void)
 	LED_INIT(); // leds
 }
 
+
+
 // main program body
 int main(void)
 {
@@ -68,6 +72,7 @@ int main(void)
 	board_init(); 	// init oscilator and leds
 	timer_init(); 	// init timer
 	sht11_init(); 	// init sht sensor
+	pwm_init();     // init pwm
 
 	#ifdef DEBUG
 	uart_init(); // init debug interface
