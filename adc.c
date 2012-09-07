@@ -1,5 +1,13 @@
 /*
- * adc module .. reading internal temprerature sensor
+ * adc.c
+ *
+ * Created on: 7.9.2012
+ *     Author: ondrejh.ck@gmail.com
+ *
+ * Description:
+ * After initialization it scans internal temperature sensor (ADC10),
+ * computing moving average from defined number of samples and
+ * testing if its less than definet trashold (overtemperature detection)
  *
  */
 
@@ -9,10 +17,23 @@
 #include "uart.h"
 #include "adc.h"
 
+#define TEMP_LIMIT 50.0
+#define TEMP_HYSTERESIS 5
+#define ADC_TEMP_TRASHOLD ((TEMP_LIMIT*423/1024-278)*AVG_BUFFLEN)
+#define ADC_TEMP_RESTORE (((TEMP_LIMIT-5)*423/1024-278)*AVG_BUFFLEN)
+bool overtemp = false;
+
 #define AVG_BUFFLEN 16
 int8_t bufptr = 0;//-1;
 uint16_t buf[AVG_BUFFLEN];
 uint16_t adc_avg;
+
+// temperature over limit informative function
+// returns internal overtemp bool value
+bool TemperatureTooHigh(void)
+{
+    return overtemp;
+}
 
 // init adc
 void adc_init(void)
@@ -37,6 +58,23 @@ __interrupt void ADC10_ISR (void)
 
     // save debug value
     set_debug_value(adc_avg,0);
+
+    if (overtemp) // awaiting temp restore
+    {
+        if (adc_avg<ADC_TEMP_RESTORE)
+        {
+            overtemp=false; // clear flag
+            set_debug_value(get_debug_value(1)&~0x8000,1);
+        }
+    }
+    else
+    {
+        if (adc_avg>ADC_TEMP_TRASHOLD)
+        {
+            overtemp=true;
+            set_debug_value(get_debug_value(1)&~0x8000,1);
+        }
+    }
 
     // restart conversion
     ADC10CTL0 &= ~ENC;

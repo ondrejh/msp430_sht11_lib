@@ -24,26 +24,22 @@
 //            |             P1.6|--> launchpad on board GREEN LED (active high)
 //            |                 |
 //            |                 |                                -------
-//            |             P2.2|--> PWM OUT -----------------> | MOTOR |
-//            |                 |                                -------
-//            |             P2.3|--> LED (active high)
+//            | ADC10       P2.2|--> PWM OUT -----------------> | MOTOR |
+//            | int.            |                                -------
+//            | temp.           |
+//            | sens.       P2.3|--> LED (active high)
 //            |             P2.4|--> BTN1 (pullup, active low)
 //            |             P2.5|--> BTN2 (pullup, active low)
 //            |                 |
 //
 //******************************************************************************
 
-//#define DEBUG
-
 // include section
 #include <msp430g2553.h>
 #include "timer.h"
 #include "board.h"
 #include "adc.h"
-
-//#ifdef DEBUG
 #include "uart.h"
-//#endif
 
 // hw depended init
 void board_init(void)
@@ -69,18 +65,16 @@ int main(void)
 	pwm_init();     // init pwm
 	adc_init();
 
-	//#ifdef DEBUG
 	uart_init(); // init debug interface
 	set_debug_value(0x0,0);	// store value for debug interface
 	set_debug_value(0x0,1);
-	//#endif
 
 	pwm_set(25); // test
 
 	while(1)
 	{
-	    if (BTN1_DOWN) PLED_ON();
-	    if (BTN2_DOWN) PLED_OFF();
+	    //if (BTN1_DOWN) PLED_ON();
+	    //if (BTN2_DOWN) PLED_OFF();
 		__bis_SR_register(CPUOFF + GIE); // enter sleep mode (leave on timer interrupt)
 	}
 

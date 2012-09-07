@@ -38,6 +38,9 @@
 #define UART_TX_BUFLEN 16
 #define UART_TX_BUFMASK 0x0F
 
+// debug values
+// 0 .. temperature adc
+// 1.15 .. flag - temperature too high
 #define CHANNELS 2
 unsigned int debug_value[CHANNELS] = {0,0};
 
