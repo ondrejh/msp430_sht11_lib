@@ -22,6 +22,7 @@
 
 // include section
 #include <msp430g2553.h>
+#include "uart.h"
 // self
 #include "timer.h"
 
@@ -56,4 +57,5 @@ void pwm_init(void)
 void pwm_set(uint8_t val)
 {
     TA1CCR1 = val;
+    set_debug_value((get_debug_value(1)&0xFF80)|val,1);
 }
