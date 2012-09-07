@@ -37,6 +37,7 @@ void timer_init(void)
 #pragma vector=TIMER0_A0_VECTOR
 __interrupt void Timer_A (void)
 {
+    CCR0 += TIMER_INTERVAL;	// Add Offset to CCR0
 	__bic_SR_register_on_exit(CPUOFF); // Clear CPUOFF bit from 0(SR)
 }
 

@@ -80,7 +80,6 @@ int main(void)
 	    if (BTN1_DOWN) PLED_ON();
 	    if (BTN2_DOWN) PLED_OFF();
 		__bis_SR_register(CPUOFF + GIE); // enter sleep mode (leave on timer interrupt)
-		PLED_SWAP();
 	}
 
 	return -1;
