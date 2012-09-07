@@ -18,14 +18,19 @@
 //          | |                 |
 //          --|RST          XOUT|-
 //            |                 |
-//            |           P1.1,2|--> UART (debug output 9.6kBaud)
+//            |           P1.1,2|--> debug UART (debug output 9.6kBaud)
 //            |                 |
-//            |             P1.0|--> RED LED (active high)
-//            |             P1.6|--> GREEN LED (active high)
+//            |             P1.0|--> launchpad on board RED LED (active high)
+//            |             P1.6|--> launchpad on board GREEN LED (active high)
+//            |                 |
 //            |                 |                                -------
 //            |             P2.2|--> PWM OUT -----------------> | MOTOR |
 //            |                 |                                -------
-
+//            |             P2.3|--> LED (active high)
+//            |             P2.4|--> BTN1 (pullup, active low)
+//            |             P2.5|--> BTN2 (pullup, active low)
+//            |                 |
+//
 //******************************************************************************
 
 #define DEBUG
@@ -46,7 +51,9 @@ void board_init(void)
 	BCSCTL1 = CALBC1_1MHZ;		// Set DCO
 	DCOCTL = CALDCO_1MHZ;
 
-	LED_INIT(); // leds
+	LED_INIT(); // launchpad onboard leds
+	PLED_INIT(); // external led
+	BUTTONS_INIT(); // external buttons
 }
 
 
@@ -70,7 +77,10 @@ int main(void)
 
 	while(1)
 	{
+	    if (BTN1_DOWN) PLED_ON();
+	    if (BTN2_DOWN) PLED_OFF();
 		__bis_SR_register(CPUOFF + GIE); // enter sleep mode (leave on timer interrupt)
+		PLED_SWAP();
 	}
 
 	return -1;

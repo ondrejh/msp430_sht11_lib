@@ -14,4 +14,12 @@
 #define LED_GREEN_OFF() {P1OUT&=~0x40;}
 #define LED_GREEN_SWAP() {P1OUT^=0x40;}
 
+#define PLED_INIT() {P2DIR|=0x08;P2OUT&=~0x08;}
+#define PLED_ON() {P2OUT|=0x08;}
+#define PLED_OFF() {P2OUT&=~0x08;}
+#define PLED_SWAP() {P2OUT^=0x08;}
+#define BUTTONS_INIT() {P2DIR&=~0x30;P2OUT&=~0x30;}
+#define BTN1_DOWN ((P2IN&0x10)==0)
+#define BTN2_DOWN ((P2IN&0x20)==0)
+
 #endif
