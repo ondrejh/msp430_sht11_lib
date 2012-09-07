@@ -72,7 +72,7 @@ __interrupt void ADC10_ISR (void)
         if (adc_avg>ADC_TEMP_TRASHOLD)
         {
             overtemp=true;
-            set_debug_value(get_debug_value(1)&~0x8000,1);
+            set_debug_value(get_debug_value(1)|0x8000,1);
         }
     }
 
