@@ -33,16 +33,17 @@
 //
 //******************************************************************************
 
-#define DEBUG
+//#define DEBUG
 
 // include section
 #include <msp430g2553.h>
 #include "timer.h"
 #include "board.h"
+#include "adc.h"
 
-#ifdef DEBUG
+//#ifdef DEBUG
 #include "uart.h"
-#endif
+//#endif
 
 // hw depended init
 void board_init(void)
@@ -66,12 +67,13 @@ int main(void)
 	board_init(); 	// init oscilator and leds
 	timer_init(); 	// init timer
 	pwm_init();     // init pwm
+	adc_init();
 
-	#ifdef DEBUG
+	//#ifdef DEBUG
 	uart_init(); // init debug interface
 	set_debug_value(0x0,0);	// store value for debug interface
 	set_debug_value(0x0,1);
-	#endif
+	//#endif
 
 	pwm_set(25); // test
 
