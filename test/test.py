@@ -1,8 +1,9 @@
 from serial import Serial
 
-PortName = 'COM11'
+#PortName = 'COM11'
+PortName = '/dev/ttyACM0'
 PortSpeed = 9600
-PortTimeout = 0.5
+PortTimeout = 0.25
 
 #StrQuestion = '?'
 StrQuestion = 'd'
@@ -13,11 +14,16 @@ StrQuestion = 'd'
 
 with Serial(PortName,PortSpeed,timeout=PortTimeout) as port:
 
-    print('Send question \"{}\"'.format(StrQuestion))
-    port.write(StrQuestion.encode('ascii'))
-    answ = port.readlines()
-    if len(answ)>0:
-        print('Receive answer \"{}\"'.format(answ[-1].strip().decode('ascii')))
-    else:
-        print('No answer');
-    port.close()
+    try:
+        while 1:
+            #print('Send question \"{}\"'.format(StrQuestion))
+            port.write(StrQuestion.encode('ascii'))
+            answ = port.readlines()
+            if len(answ)>0:
+                #print('Receive answer \"{}\"'.format(answ[-1].strip().decode('ascii')))
+                print('{}'.format(answ[-1].strip().decode('ascii')))
+            else:
+                print('No answer');
+    except:# (KeyboardInterrupt, SystemExit):
+        port.close()
+    
