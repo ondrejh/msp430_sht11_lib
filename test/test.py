@@ -3,7 +3,7 @@ from serial import Serial
 #PortName = 'COM11'
 PortName = '/dev/ttyACM0'
 PortSpeed = 9600
-PortTimeout = 0.25
+PortTimeout = 0.20
 
 #StrQuestion = '?'
 StrQuestion = 'd'
