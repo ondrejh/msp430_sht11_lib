@@ -34,6 +34,8 @@
 //
 //******************************************************************************
 
+#define POWER_STEP 5
+
 // include section
 #include <msp430g2553.h>
 #include "timer.h"
@@ -69,12 +71,41 @@ int main(void)
 	set_debug_value(0x0,0);	// store value for debug interface
 	set_debug_value(0x0,1);
 
-	pwm_set(25); // test
+	uint8_t power = 25;
+	bool motor_on = false;
 
 	while(1)
 	{
-	    //if (BTN1_DOWN) PLED_ON();
-	    //if (BTN2_DOWN) PLED_OFF();
+	    switch (button_status)
+	    {
+	        case BTN1_PRESSED: // on
+                if (!motor_on) motor_on=true;
+                else power+=POWER_STEP;
+                break;
+            case BTN2_PRESSED: // off
+                motor_on=false;
+                break;
+            case BTN1_HOLD: // power up
+                power+=POWER_STEP;
+                break;
+            case BTN2_HOLD: // power down
+                power-=POWER_STEP;
+                break;
+	    }
+
+	    if (power>100) power=100;
+	    if (power<=0) {power=POWER_STEP;motor_on=false;}
+
+	    if (motor_on)
+	    {
+	        pwm_set(power);
+	        PLED_ON();
+	    }
+	    else
+	    {
+	        pwm_set(0);
+	        PLED_OFF();
+	    }
 		__bis_SR_register(CPUOFF + GIE); // enter sleep mode (leave on timer interrupt)
 	}
 

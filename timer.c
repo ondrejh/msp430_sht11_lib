@@ -23,8 +23,12 @@
 // include section
 #include <msp430g2553.h>
 #include "uart.h"
+#include "board.h"
 // self
 #include "timer.h"
+
+// button status interface variable
+uint8_t button_status = 0;
 
 // timer init (timer 0A)
 void timer_init(void)
@@ -39,7 +43,85 @@ void timer_init(void)
 __interrupt void Timer_A (void)
 {
     CCR0 += TIMER_INTERVAL;	// Add Offset to CCR0
-	__bic_SR_register_on_exit(CPUOFF); // Clear CPUOFF bit from 0(SR)
+
+    // button filtering registers
+    static bool fbutton[2]={false,false};
+    static uint8_t btnbuf[2]={0,0};
+
+    // button filtering
+    uint16_t i;
+    btnbuf[0]<<=1;
+    btnbuf[1]<<=1;
+    if (BTN1_DOWN) btnbuf[0]|=0x01;
+    if (BTN2_DOWN) btnbuf[1]|=0x01;
+    for (i=0;i<2;i++)
+    {
+        btnbuf[i]<<=1;
+        if BTN_DOWN(i) btnbuf[i]|=0x01;
+        if ((btnbuf[i]&0x07)==0x07) fbutton[i]=true;
+        if ((btnbuf[i]&0x07)==0x00) fbutton[i]=false;
+    }
+    // debug mirror of filtered buttons
+    i = get_debug_value(1);
+    i &= 0xFCFF;
+    if (fbutton[0]) i|=0x0100;
+    if (fbutton[1]) i|=0x0200;
+    set_debug_value(i,1);
+
+    // buttons sequential
+    static uint8_t btn_seqv[2] = {0,0};
+    static uint8_t btn_timer[2] = {0,0};
+    button_status = 0;
+    for (i=0;i<2;i++)
+    {
+        switch (btn_seqv[i])
+        {
+            case 0: // (awaiting) button press
+                if (fbutton[i])
+                {
+                    // reset timer and goto next state
+                    btn_timer[i]=0;
+                    btn_seqv[i]++;
+                }
+                break;
+            case 1: // button leave (short press) or holding timeout
+                if (!fbutton[i])
+                {
+                    // set button pressed flag
+                    button_status |= (i==0) ? BTN1_PRESSED : BTN2_PRESSED;
+                    // back to waiting buttonpress
+                    btn_seqv[i]=0;
+                }
+                btn_timer[i]++;
+                if (btn_timer[i]>=BTN_SHORTPRESS_LIMIT)
+                {
+                    // set button hold flag
+                    button_status |= (i==0) ? BTN1_HOLD : BTN2_HOLD;
+                    // reset timer
+                    btn_timer[i]= 0;
+                    // goto button holding state
+                    btn_seqv[i]++;
+                }
+                break;
+            case 2: // holding end
+                if (!fbutton[i]) btn_seqv[i]=0; // back to waiting button press
+                btn_timer[i]++;
+                if (btn_timer[i]>=BTN_LONGPRESS_PERIOD)
+                {
+                    // set button hold flag
+                    button_status |= (i==0) ? BTN1_HOLD : BTN2_HOLD;
+                    // clear timer for next period
+                    btn_timer[i]=0;
+                }
+                break;
+            default: // should never happen
+                btn_seqv[i]=0;
+                break;
+        }
+    }
+
+    // if something to do in main .. wake up the mcu
+    if (button_status!=0) __bic_SR_register_on_exit(CPUOFF); // Clear CPUOFF bit from 0(SR)
 }
 
 // init pwm timer (timer 1A)

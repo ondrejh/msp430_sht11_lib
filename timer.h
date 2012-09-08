@@ -24,10 +24,20 @@
 #define __TIMER_H__
 
 #include <inttypes.h>
+#include <stdbool.h>
+
+// button timing
+#define BTN_SHORTPRESS_LIMIT 30
+#define BTN_LONGPRESS_PERIOD 50
+// button status interface variable
+#define BTN1_PRESSED 0x01
+#define BTN1_HOLD 0x02
+#define BTN2_PRESSED 0x10
+#define BTN2_HOLD 0x20
+uint8_t button_status;
 
 // timer interval (10ms / 1MHz osc / fosc/8)
 #define TIMER_INTERVAL 1250
-
 void timer_init(void);
 
 // pwm period
