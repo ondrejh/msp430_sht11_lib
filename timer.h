@@ -26,6 +26,8 @@
 #include <inttypes.h>
 #include <stdbool.h>
 
+#define SOFTSTART_TIME_DIVIDER 3
+
 // button timing
 #define BTN_SHORTPRESS_LIMIT 30
 #define BTN_LONGPRESS_1ST_PERIOD 50
@@ -36,6 +38,8 @@
 #define BTN2_PRESSED 0x10
 #define BTN2_HOLD 0x20
 uint8_t button_status;
+
+void set_softstart_power(uint8_t pwr);
 
 // timer interval (10ms / 1MHz osc / fosc/8)
 #define TIMER_INTERVAL 1250

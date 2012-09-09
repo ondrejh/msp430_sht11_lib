@@ -30,6 +30,14 @@
 // button status interface variable
 uint8_t button_status = 0;
 
+// motor softstart variables
+uint8_t end_power=0, act_power=0;
+
+void set_softstart_power(uint8_t pwr)
+{
+    end_power = pwr;
+}
+
 // timer init (timer 0A)
 void timer_init(void)
 {
@@ -132,6 +140,21 @@ __interrupt void Timer_A (void)
                 break;
         }
     }
+
+    // softstart routine
+    static uint8_t softstart_counter = 0;
+    if (end_power!=act_power)
+    {
+        softstart_counter++;
+        if (softstart_counter==SOFTSTART_TIME_DIVIDER)
+        {
+            softstart_counter=0;
+            if (act_power<end_power) act_power++;
+            if (end_power<act_power) act_power--;
+            pwm_set(act_power);
+        }
+    }
+    else softstart_counter=0;
 
     // if something to do in main .. wake up the mcu
     if (button_status!=0) __bic_SR_register_on_exit(CPUOFF); // Clear CPUOFF bit from 0(SR)

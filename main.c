@@ -103,12 +103,14 @@ int main(void)
 
 	    if (motor_on)
 	    {
-	        pwm_set(power);
+	        //pwm_set(power);
+	        set_softstart_power(power);
 	        PLED_ON();
 	    }
 	    else
 	    {
-	        pwm_set(0);
+	        //pwm_set(0);
+	        set_softstart_power(0);
 	        PLED_OFF();
 	    }
 		__bis_SR_register(CPUOFF + GIE); // enter sleep mode (leave on timer interrupt)
