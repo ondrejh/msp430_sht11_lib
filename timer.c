@@ -103,10 +103,23 @@ __interrupt void Timer_A (void)
                     btn_seqv[i]++;
                 }
                 break;
-            case 2: // holding end
+            case 2: // holding end (first time)
                 if (!fbutton[i]) btn_seqv[i]=0; // back to waiting button press
                 btn_timer[i]++;
-                if (btn_timer[i]>=BTN_LONGPRESS_PERIOD)
+                if (btn_timer[i]>=BTN_LONGPRESS_1ST_PERIOD)
+                {
+                    // set button hold flag
+                    button_status |= (i==0) ? BTN1_HOLD : BTN2_HOLD;
+                    // clear timer for next period
+                    btn_timer[i]=0;
+                    // goto repeated holding
+                    btn_seqv[i]++;
+                }
+                break;
+            case 3: // holding end (repeated)
+                if (!fbutton[i]) btn_seqv[i]=0; // back to waiting button press
+                btn_timer[i]++;
+                if (btn_timer[i]>=BTN_LONGPRESS_REPEATED_PERIOD)
                 {
                     // set button hold flag
                     button_status |= (i==0) ? BTN1_HOLD : BTN2_HOLD;

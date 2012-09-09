@@ -28,7 +28,8 @@
 
 // button timing
 #define BTN_SHORTPRESS_LIMIT 30
-#define BTN_LONGPRESS_PERIOD 50
+#define BTN_LONGPRESS_1ST_PERIOD 50
+#define BTN_LONGPRESS_REPEATED_PERIOD 25
 // button status interface variable
 #define BTN1_PRESSED 0x01
 #define BTN1_HOLD 0x02

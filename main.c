@@ -83,13 +83,18 @@ int main(void)
                 else power+=POWER_STEP;
                 break;
             case BTN2_PRESSED: // off
-                motor_on=false;
+                motor_on = false;
                 break;
             case BTN1_HOLD: // power up
+                if (!motor_on)
+                {
+                    power=0;
+                    motor_on=true;
+                }
                 power+=POWER_STEP;
                 break;
             case BTN2_HOLD: // power down
-                power-=POWER_STEP;
+                if (motor_on) power-=POWER_STEP;
                 break;
 	    }
 
