@@ -1,6 +1,6 @@
 from serial import Serial
 
-PortName = 'COM11'
+PortName = 'COM6'
 PortSpeed = 9600
 PortTimeout = 0.5
 
