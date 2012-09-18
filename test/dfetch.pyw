@@ -208,6 +208,7 @@ class runapp_gui(Frame):
             self.snsThread.start()
             self.boolConnected = True
             self.btnConnect.config(relief=RIDGE,state=DISABLED)
+            self.btnSettings.config(state=DISABLED)
 
     def showData(self,result):
         '''this is called by serial thread when some data fetched from sensor
@@ -218,6 +219,8 @@ class runapp_gui(Frame):
                 #show result
                 try:
                     r0 = int(result[0],10)/10
+                    if r0>=800:
+                        r0=-(r0-800)
                     self.strTemp.set('{}'.format(r0))
                     r1 = int(result[1],10)/10
                     self.strHumi.set('{}'.format(r1))
@@ -241,6 +244,8 @@ class runapp_gui(Frame):
         self.btnConnect.config(relief=RAISED,state=NORMAL)
 
         self.lblInfo.config(text='Connection {}'.format(reason))
+
+        self.btnSettings.config(state=NORMAL)
 
 
 app = runapp_gui()
