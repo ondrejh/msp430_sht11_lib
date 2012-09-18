@@ -4,3 +4,5 @@
 *.map
 *.layout
 msp430sht.txt
+test/serselect
+test/serselect/*

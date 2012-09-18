@@ -79,13 +79,18 @@ class runapp_gui(Frame):
 
     def __init__(self,master=None):
         self.root = Tk()
-        self.root.title('MSP430 SHT11 ({})'.format(PortName))
         try:
             self.root.iconbitmap(default='img/launchpad.ico')
         except:
             pass
         Frame.__init__(self,master)
+        self.portName = PortName
+        self.setTitle()
         self.createWidgets()
+
+    def setTitle(self):
+        'set window title'
+        self.root.title('MSP430 SHT11 ({})'.format(self.portName))
 
     def createWidgets(self):
         ''' creating form widgets (artwork) '''
@@ -105,7 +110,8 @@ class runapp_gui(Frame):
         ToolTip.ToolTip(self.btnConnect,'Connect/Disconnect')
         acol += 1
         self.imgSettings = PhotoImage(file='img/settings.gif')
-        self.btnSettings = Button(self.frmLeftBtns,image=self.imgSettings,state=DISABLED)
+        self.btnSettings = Button(self.frmLeftBtns,image=self.imgSettings,
+                                  command=self.configClick)#,state=DISABLED)
         self.btnSettings.grid(row=0, column=acol)
         ToolTip.ToolTip(self.btnSettings,'Settings')
 
@@ -158,6 +164,34 @@ class runapp_gui(Frame):
         self.separator = Frame(height=2, bd=1, relief=SUNKEN)
         self.separator.pack(fill=X, padx=5, pady=5)
 
+    def configClick(self):
+        ''' on config button click '''
+
+        from serselect import serscan
+        self.configWindow = Toplevel()
+        self.configFrame = Frame(self.configWindow)
+        self.configFrame.pack()
+        ports = serscan.scan()
+        self.strPort = StringVar()
+        if len(ports)>0:
+            for p in ports:
+                b = Radiobutton(self.configFrame, text=p[1], variable=self.strPort, value=p[1])
+                b.pack(side=TOP, expand=YES, pady=2, anchor='w')
+            self.btnPortSelect = Button(self.configFrame, text='OK', command=self.portSelectClick)
+            self.btnPortSelect.pack(fill=X,expand=1,pady=2)
+        else:
+            l = Label(self.configFrame,text='No port found !')
+            l.pack()
+
+    def portSelectClick(self):
+        'ok button click (in serial select radio group)'
+
+        self.configWindow.destroy()
+        if self.strPort.get()!='':
+            self.portName=self.strPort.get()
+        self.setTitle()
+        
+
     def connectClick(self):
         ''' on connect button click
         it tests if connect thread is running and decide if it is wanted to stop
@@ -169,7 +203,7 @@ class runapp_gui(Frame):
             self.btnConnect.config(relief=RAISED,state=DISABLED)
         else:
             #connect
-            self.snsThread = thrDataFetch(PortName,PortSpeed,PortTimeout,StrQuestion,
+            self.snsThread = thrDataFetch(self.portName,PortSpeed,PortTimeout,StrQuestion,
                                           self.showData,self.onStopComm)
             self.snsThread.start()
             self.boolConnected = True
