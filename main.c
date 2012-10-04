@@ -61,6 +61,23 @@ void board_init(void)
 	LED_INIT(); // leds
 }
 
+void print_val(int val,char *s)
+{
+    int uV = val;
+    s[0]=' ';
+    if (val<0)
+    {
+        s[0]='-';
+        uV=-val;
+    }
+    else if (uV>=1000) s[0]=1;
+    s[1]=(uV%1000/100)+'0';
+    s[2]=(uV%100/10)+'0';
+    s[3]='.';
+    s[4]=(uV%10)+'0';
+    s[5]='\0';
+}
+
 // main program body
 int main(void)
 {
@@ -87,6 +104,7 @@ int main(void)
 	{
 		unsigned int Tval,Hval;
 		int TvalC,HvalC;
+		char str[8];
 		LED_GREEN_ON();
 		if ((sht_measure_check(&Tval,TEMP)==0) && (sht_measure_check(&Hval,HUMI)==0))
 		{
@@ -95,6 +113,12 @@ int main(void)
 			set_debug_value(int2bcd(TvalC),0);
 			set_debug_value(int2bcd(HvalC),1);
 			#endif
+			print_val(TvalC,str);
+			lcm_goto(0,9);
+			lcm_prints(str);
+			print_val(HvalC,str);
+			lcm_goto(1,9);
+			lcm_prints(str);
 		}
 	    LED_GREEN_OFF();
 		__bis_SR_register(CPUOFF + GIE); // enter sleep mode (leave on timer interrupt)
