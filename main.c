@@ -36,6 +36,7 @@
 #include "timer.h"
 #include "sht11.h"
 #include "sht11con.h"
+#include "lcd.h"
 
 #ifdef DEBUG
 #include "uart.h"
@@ -66,6 +67,7 @@ int main(void)
 	WDTCTL = WDTPW + WDTHOLD;	// Stop WDT
 
 	board_init(); 	// init oscilator and leds
+	lcm_init();     // display
 	timer_init(); 	// init timer
 	sht11_init(); 	// init sht sensor
 
@@ -74,6 +76,12 @@ int main(void)
 	set_debug_value(0x0,0);	// store value for debug interface
 	set_debug_value(0x0,1);
 	#endif
+
+	lcm_clearscr(); // clear screen
+	lcm_goto(0,0);
+	lcm_prints("Temp.:   xxx.x C");
+	lcm_goto(1,0);
+	lcm_prints("Humi.:   xxx.x %");
 
 	while(1)
 	{
