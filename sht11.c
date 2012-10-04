@@ -33,10 +33,15 @@
 // delay
 #define delay_us(x) __delay_cycles(x)
 // port (DATA P2.0, SCK P2.1)
-#define SHT_PORT_INIT() {P2DIR|=0x03;P2OUT&=~0x03;}
+/*#define SHT_PORT_INIT() {P2DIR|=0x03;P2OUT&=~0x03;}
 #define SHT_DATA_OUT(x) {if (x!=0) P2DIR|=0x01; else P2DIR&=~0x01;}
 #define SHT_DATA_IN (((P2IN&0x01)!=0)?1:0)
-#define SHT_SCK(x) {if (x!=0) P2OUT|=0x02; else P2OUT&=~0x02;}
+#define SHT_SCK(x) {if (x!=0) P2OUT|=0x02; else P2OUT&=~0x02;}*/
+// port (DATA P1.5, SCK P1.4)
+#define SHT_PORT_INIT() {P1DIR|=0x30;P1OUT&=~0x30;}
+#define SHT_DATA_OUT(x) {if (x!=0) P1DIR|=0x20; else P1DIR&=~0x20;}
+#define SHT_DATA_IN (((P1IN&0x20)!=0)?1:0)
+#define SHT_SCK(x) {if (x!=0) P1OUT|=0x10; else P1OUT&=~0x10;}
 
 // communication
 #define		noACK	0
