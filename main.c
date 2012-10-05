@@ -107,9 +107,11 @@ int main(void)
 
 	lcm_clearscr(); // clear screen
 	lcm_goto(0,0);
-	lcm_prints("Temp.:   xxx.x C");
+	lcm_prints("Temp.:  xxx.x  C"); // temperature template
+	lcm_goto(0,14);
+	lcm_prints("\xdf"); // degree symbol
 	lcm_goto(1,0);
-	lcm_prints("Humi.:   xxx.x %");
+	lcm_prints("Humi.:  xxx.x  %"); // humidity template
 
 	while(1)
 	{
@@ -125,10 +127,10 @@ int main(void)
 			set_debug_value(int2bcd(HvalC),1);
 			#endif
 			print_val(TvalC,str);
-			lcm_goto(0,9);
+			lcm_goto(0,8);
 			lcm_prints(str);
 			print_val(HvalC,str);
-			lcm_goto(1,9);
+			lcm_goto(1,8);
 			lcm_prints(str);
 		}
 	    LED_GREEN_OFF();
