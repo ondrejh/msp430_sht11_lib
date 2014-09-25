@@ -1,7 +1,7 @@
 {
   "name": "MSP430-SHT11",
   "keywords": "sensor, humidity, temperature",
-  "description": "SHT11 is Sensirion’s family of surface mountable relative humidity and temperature sensor",
+  "description": "SHT11 is Sensirion family of surface mountable relative humidity and temperature sensor",
   "repository":
   {
     "type": "git",
