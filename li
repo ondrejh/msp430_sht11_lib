@@ -1,0 +1,15 @@
+{
+  "name": "MSP430-SHT11",
+  "keywords": "sensor, humidity, temperature",
+  "description": "SHT11 is Sensirion’s family of surface mountable relative humidity and temperature sensor",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/ondrejh/msp430_sht11_lib.git"
+  },
+  "include": [
+    "*.h",
+    "*.c"
+  ],
+  "examples": "main.c"
+}
