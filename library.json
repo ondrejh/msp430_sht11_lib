@@ -1,5 +1,5 @@
 {
-  "name": "MSP430-SHT11",
+  "name": "SHT11",
   "keywords": "sensor, humidity, temperature",
   "description": "SHT11 is Sensirion family of surface mountable relative humidity and temperature sensor",
   "repository":
@@ -11,5 +11,6 @@
     "*.h",
     "*.c"
   ],
-  "examples": "main.c"
+  "examples": "main.c",
+  "platforms": "timsp430"
 }
